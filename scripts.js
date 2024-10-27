@@ -5,5 +5,26 @@ form.addEventListener("submit", (event) => {
   event.preventDefault();
   const entries = new FormData(event.target);
   const { dividend, divider } = Object.fromEntries(entries);
-  result.innerText = dividend / divider;
+
+  if (isNaN(dividend) || isNaN(divider)){
+    const errorDiv = document.createElement('div');
+    errorDiv.textContent = "Something critical went wrong. Please reload the page";
+    errorDiv.classList.add("critical-error");
+    document.body.appendChild(errorDiv);
+    console.error("Non-numeric input detected.");
+
+  } else {
+    if (divider === "0"){
+      result.innerText = "Division not performed because invalid number provided. Try again.";
+      result.classList.add("error-message");
+      console.error("Math Error! Division by zero attempted.");
+    } else if (dividend === "" || divider === ""){
+      result.innerText = "Division not performed. Both values are required in inputs. Try again.";
+      result.classList.add("error-message");
+    } else {
+    const divisionResult = dividend / divider;
+    result.innerText = Math.floor(divisionResult);
+    result.classList.remove("error-message");
+    }
+  }
 });
